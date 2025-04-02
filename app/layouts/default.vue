@@ -1,8 +1,10 @@
+<script setup lang="ts">
+import TheHeader from "~/components/layout/TheHeader.vue";
+</script>
+
 <template>
   <v-app>
-    <v-app-bar elevation="1" class="pl-4">
-      <strong>음식 메뉴 추천</strong>
-    </v-app-bar>
+    <TheHeader />
     <v-main>
       <slot />
     </v-main>

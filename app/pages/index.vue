@@ -1,6 +1,5 @@
 <template>
   <div>
-    <!-- 심플하고 모던한 감성을 위해 앱 바는 최소한으로 -->
     <v-container fluid>
       <v-row align="center" justify="center" class="my-5">
         <v-col cols="12" sm="8" md="6" lg="4">
