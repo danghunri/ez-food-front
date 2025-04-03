@@ -1,7 +1,7 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 import vuetify, { transformAssetUrls } from "vite-plugin-vuetify";
 export default defineNuxtConfig({
-  _modules: ["@nuxt/eslint"],
+  _modules: ["@nuxt/eslint", "@nuxthub/core"],
   compatibilityDate: "2024-11-01",
   devtools: { enabled: true },
   future: {
