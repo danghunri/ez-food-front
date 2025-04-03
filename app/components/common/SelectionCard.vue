@@ -3,6 +3,10 @@
     :class="[
       'selection-card',
       'ma-2',
+      'd-flex',
+      'flex-column',
+      'align-center',
+      'justify-center',
       { 'selection-card--selected': modelValue === value },
     ]"
     elevation="2"

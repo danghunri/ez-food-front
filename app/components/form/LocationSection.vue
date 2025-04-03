@@ -1,16 +1,18 @@
 <template>
   <div class="mb-4">
     <div class="text-subtitle-1 mb-2">위치</div>
-    <v-row justify="center">
-      <SelectionCard
-        v-for="item in locationOptions"
-        :key="item.value"
-        v-model="model as string"
-        :value="item.value"
-        :label="item.label"
-        :icon="item.icon"
-      />
-    </v-row>
+    <div class="align-center d-flex justify-center px-5">
+      <v-row>
+        <SelectionCard
+          v-for="item in locationOptions"
+          :key="item.value"
+          v-model="model as string"
+          :value="item.value"
+          :label="item.label"
+          :icon="item.icon"
+        />
+      </v-row>
+    </div>
   </div>
 </template>
 
