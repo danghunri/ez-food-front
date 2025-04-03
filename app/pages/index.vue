@@ -7,25 +7,9 @@
           <v-card class="pa-4" elevation="2">
             <h2 class="text-h5 mb-4 text-center">메뉴 추천을 위한 정보 입력</h2>
 
-            <!-- 식사 시간 -->
-            <v-select
-              v-model="selectedMealTime"
-              :items="mealTimeItems"
-              label="아침 / 점심 / 저녁"
-              density="comfortable"
-              outlined
-              class="mb-3"
-            />
-
-            <!-- 위치 -->
-            <v-select
-              v-model="selectedLocation"
-              :items="locationItems"
-              label="위치 (예: 실내, 실외 등)"
-              density="comfortable"
-              outlined
-              class="mb-3"
-            />
+            <!-- 컴포넌트로 분리된 섹션들 -->
+            <MealTimeSection v-model="selectedMealTime" />
+            <LocationSection v-model="selectedLocation" />
 
             <!-- 기온 -->
             <v-select
@@ -58,35 +42,9 @@
             />
 
             <!-- 추천 버튼 -->
-            <v-btn block color="primary" @click="recommendFoods" elevation="2">
+            <v-btn block color="primary" elevation="2" @click="recommendFoods">
               음식 추천받기
             </v-btn>
-          </v-card>
-        </v-col>
-      </v-row>
-
-      <!-- 추천 결과 영역 -->
-      <v-row
-        align="center"
-        justify="center"
-        v-if="recommendationReason || recommendedFoods.length > 0"
-      >
-        <v-col cols="12" sm="8" md="6" lg="4">
-          <v-card class="pa-4" elevation="2">
-            <h2 class="text-h5 mb-4 text-center">추천 결과</h2>
-            <div class="mb-4" v-if="recommendationReason">
-              <strong>추천 이유:</strong>
-              <p>{{ recommendationReason }}</p>
-            </div>
-
-            <div v-if="recommendedFoods.length > 0">
-              <strong>추천 음식 리스트(랭킹 순):</strong>
-              <ol class="mt-2">
-                <li v-for="(food, index) in recommendedFoods" :key="index">
-                  {{ food }}
-                </li>
-              </ol>
-            </div>
           </v-card>
         </v-col>
       </v-row>
@@ -95,14 +53,20 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { b64EncodeUnicode } from "~/utils/encoding";
+import MealTimeSection from "~/components/form/MealTimeSection.vue";
+import LocationSection from "~/components/form/LocationSection.vue";
+import {
+  TEMPERATURE_ITEMS,
+  SEASON_ITEMS,
+  PURPOSE_ITEMS,
+  FOOD_BY_MEAL_TIME,
+} from "~/constants/menu";
 
 // 옵션 목록
-const mealTimeItems = ["아침", "점심", "저녁"];
-const locationItems = ["실내", "실외", "카페", "기타"];
-const temperatureItems = ["시원한 날씨", "더운 날씨", "추운 날씨"];
-const seasonItems = ["봄", "여름", "가을", "겨울"];
-const purposeItems = ["든든하게", "가볍게", "다이어트", "특별한 날", "기타"];
+const temperatureItems = TEMPERATURE_ITEMS;
+const seasonItems = SEASON_ITEMS;
+const purposeItems = PURPOSE_ITEMS;
 
 // 선택값
 const selectedMealTime = ref("");
@@ -111,12 +75,8 @@ const selectedTemperature = ref("");
 const selectedSeason = ref("");
 const selectedPurpose = ref("");
 
-// 추천 결과 데이터
-const recommendationReason = ref("");
-const recommendedFoods = ref<string[]>([]);
-
-// 추천 함수 (실제로는 API나 별도 로직으로 대체 가능)
-const recommendFoods = () => {
+// 추천 함수
+const recommendFoods = async () => {
   // 선택값을 바탕으로 임의 로직 (예시)
   const mealTime = selectedMealTime.value;
   const location = selectedLocation.value;
@@ -131,13 +91,13 @@ const recommendFoods = () => {
 
   // 예시 로직
   if (mealTime === "아침") {
-    foods = ["토스트", "샐러드", "죽", "아메리칸 브렉퍼스트"];
+    foods = FOOD_BY_MEAL_TIME.아침;
   } else if (mealTime === "점심") {
-    foods = ["비빔밥", "파스타", "샌드위치", "칼국수"];
+    foods = FOOD_BY_MEAL_TIME.점심;
   } else if (mealTime === "저녁") {
-    foods = ["삼겹살", "피자", "스테이크", "초밥"];
+    foods = FOOD_BY_MEAL_TIME.저녁;
   } else {
-    foods = ["아무거나..?"];
+    foods = FOOD_BY_MEAL_TIME.기타;
   }
 
   // 기온, 계절, 목적 같은 추가 정보를 바탕으로 약간의 필터/정렬(예시)
@@ -155,8 +115,16 @@ const recommendFoods = () => {
     );
   }
 
-  // 결과 대입
-  recommendationReason.value = reason;
-  recommendedFoods.value = foods;
+  // 결과 데이터 생성
+  const resultData = {
+    reason: reason,
+    foods: foods,
+  };
+
+  const encodedData = b64EncodeUnicode(JSON.stringify(resultData));
+  await navigateTo({
+    path: "/result",
+    query: { data: encodedData },
+  });
 };
 </script>

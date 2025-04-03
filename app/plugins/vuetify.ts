@@ -18,6 +18,11 @@ export default defineNuxtPlugin((app) => {
       themes: {
         myCustomLightTheme,
       },
+      variations: {
+        colors: ["primary", "secondary"],
+        lighten: 2,
+        darken: 2,
+      },
     },
   });
   app.vueApp.use(vuetify);
