@@ -25,7 +25,7 @@ onMounted(() => {
       <v-col cols="12" sm="8" md="6" lg="4">
         <v-card class="pa-4" elevation="2">
           <h2 class="text-h5 mb-4 text-center">추천 결과</h2>
-          <div class="mb-4" v-if="recommendationReason">
+          <div v-if="recommendationReason" class="mb-4">
             <strong>추천 이유:</strong>
             <p>{{ recommendationReason }}</p>
           </div>

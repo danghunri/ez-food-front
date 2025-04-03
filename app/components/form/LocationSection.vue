@@ -5,7 +5,7 @@
       <SelectionCard
         v-for="item in locationOptions"
         :key="item.value"
-        v-model="selectedLoc"
+        v-model="model as string"
         :value="item.value"
         :label="item.label"
         :icon="item.icon"
@@ -18,16 +18,6 @@
 import SelectionCard from "~/components/common/SelectionCard.vue";
 import { LOCATION_OPTIONS } from "~/constants/locations";
 
-const props = defineProps<{
-  modelValue: string;
-}>();
-
-const emit = defineEmits(["update:modelValue"]);
-
+const model = defineModel<string>();
 const locationOptions = LOCATION_OPTIONS;
-const selectedLoc = ref(props.modelValue);
-
-watch(selectedLoc, (newValue) => {
-  emit("update:modelValue", newValue);
-});
 </script>

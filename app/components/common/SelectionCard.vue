@@ -5,10 +5,10 @@
       'ma-2',
       { 'selection-card--selected': modelValue === value },
     ]"
-    @click="$emit('update:modelValue', value)"
     elevation="2"
     width="100"
     height="100"
+    @click="$emit('update:modelValue', value)"
   >
     <v-card-item class="text-center">
       <v-icon size="32" class="mb-2">{{ icon }}</v-icon>
