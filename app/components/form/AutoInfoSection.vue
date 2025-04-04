@@ -2,16 +2,16 @@
   <div class="mb-4">
     <div class="text-subtitle-1 mb-2">자동 정보</div>
     <v-row>
-      <v-col cols="6">
+      <v-col cols="12" sm="6">
         <DateInfo />
       </v-col>
-      <v-col cols="6">
+      <v-col cols="12" sm="6">
         <LocationInfo />
       </v-col>
-      <v-col cols="6">
+      <v-col cols="12" sm="6">
         <WeatherInfo />
       </v-col>
-      <v-col cols="6">
+      <v-col cols="12" sm="6">
         <TemperatureInfo />
       </v-col>
     </v-row>

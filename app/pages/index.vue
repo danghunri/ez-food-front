@@ -1,5 +1,5 @@
 <template>
-  <v-container :class="containerClass">
+  <v-container fluid :max-width="containerSize">
     <v-card class="pa-4">
       <h1 class="text-h4 mb-6 text-center">메뉴 추천</h1>
 
@@ -52,26 +52,17 @@ const handleSubmit = async () => {
   }
 };
 
-// Vuetify의 useDisplay 훅으로 반응형 속성 가져오기
-const { mdAndUp, lgAndUp } = useDisplay();
+const containerSize = ref<number>(800);
+onMounted(() => {
+  const { mdAndUp, lgAndUp } = useDisplay();
 
-// 반응형 속성에 따라 컨테이너 클래스 설정
-const containerClass = computed(() => {
-  if (lgAndUp.value) return "containerLg";
-  if (mdAndUp.value) return "containerMd";
-  return "containerBase"; // 기본값(모바일 크기)
+  // watchEffect를 사용하여 반응형 값 변경 감지
+  watchEffect(() => {
+    // 컨테이너 크기 설정
+    if (lgAndUp.value) containerSize.value = 1000;
+    else if (mdAndUp.value) containerSize.value = 800;
+    else containerSize.value = 600;
+  });
 });
 </script>
-<style scoped>
-.containerBase {
-  max-width: 100%;
-}
-
-.containerMd {
-  max-width: 800px;
-}
-
-.containerLg {
-  max-width: 1000px;
-}
-</style>
+<style scoped></style>

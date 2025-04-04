@@ -22,7 +22,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed, ref, onMounted } from "vue";
 import { useDisplay } from "vuetify";
 
 defineProps<{
@@ -36,21 +36,24 @@ defineEmits<{
   "update:modelValue": [value: string];
 }>();
 
-// Vuetify의 useDisplay 훅으로 반응형 속성 가져오기
-const { mdAndUp, lgAndUp } = useDisplay();
+const cardSize = ref(100); // 기본값으로 시작
+const iconSize = ref(32); // 기본값으로 시작
 
-// 카드 크기를 반응형으로 설정
-const cardSize = computed(() => {
-  if (lgAndUp.value) return 140; // 큰 화면 크기
-  if (mdAndUp.value) return 120; // 중간 화면 크기
-  return 100; // 기본값(모바일 크기)
-});
+onMounted(() => {
+  const { mdAndUp, lgAndUp } = useDisplay();
 
-// 아이콘 크기를 반응형으로 설정
-const iconSize = computed(() => {
-  if (lgAndUp.value) return 48; // 큰 화면 크기
-  if (mdAndUp.value) return 40; // 중간 화면 크기
-  return 32; // 기본값(모바일 크기)
+  // watchEffect를 사용하여 반응형 값 변경 감지
+  watchEffect(() => {
+    // 카드 크기 설정
+    if (lgAndUp.value) cardSize.value = 140;
+    else if (mdAndUp.value) cardSize.value = 120;
+    else cardSize.value = 100;
+
+    // 아이콘 크기 설정
+    if (lgAndUp.value) iconSize.value = 48;
+    else if (mdAndUp.value) iconSize.value = 40;
+    else iconSize.value = 32;
+  });
 });
 </script>
 
