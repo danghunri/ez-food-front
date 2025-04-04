@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container :class="containerClass">
     <v-card class="pa-4">
       <h1 class="text-h4 mb-6 text-center">메뉴 추천</h1>
 
@@ -24,6 +24,7 @@
 </template>
 
 <script setup lang="ts">
+import { useDisplay } from "vuetify";
 import AutoInfoSection from "~/components/form/AutoInfoSection.vue";
 import FoodTypeSection from "~/components/form/FoodTypeSection.vue";
 import MealTimeSection from "~/components/form/MealTimeSection.vue";
@@ -50,4 +51,27 @@ const handleSubmit = async () => {
     isLoading.value = false;
   }
 };
+
+// Vuetify의 useDisplay 훅으로 반응형 속성 가져오기
+const { mdAndUp, lgAndUp } = useDisplay();
+
+// 반응형 속성에 따라 컨테이너 클래스 설정
+const containerClass = computed(() => {
+  if (lgAndUp.value) return "containerLg";
+  if (mdAndUp.value) return "containerMd";
+  return "containerBase"; // 기본값(모바일 크기)
+});
 </script>
+<style scoped>
+.containerBase {
+  max-width: 100%;
+}
+
+.containerMd {
+  max-width: 800px;
+}
+
+.containerLg {
+  max-width: 1000px;
+}
+</style>
