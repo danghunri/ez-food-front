@@ -22,7 +22,7 @@ const loading = ref(true);
 const date = ref("");
 
 onMounted(async () => {
-  date.value = new Date().toLocaleDateString("ko-KR");
+  date.value = new Date().toLocaleString("ko-KR");
   loading.value = false;
 });
 </script>

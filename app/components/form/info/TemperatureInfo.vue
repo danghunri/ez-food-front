@@ -31,4 +31,3 @@ onMounted(async () => {
   }, 1000);
 });
 </script>
->
