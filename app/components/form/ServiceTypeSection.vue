@@ -1,34 +1,28 @@
 <template>
-  <div class="mb-4">
-    <div class="text-subtitle-1 mb-2">서비스 유형</div>
-    <div class="align-center d-flex justify-center px-5">
-      <v-row justify="center">
+  <div class="mb-4 px-md-16 px-sm-8 px-4">
+    <div class="text-h5 mb-4">서비스 유형</div>
+    <v-row>
+      <v-col
+        v-for="item in SERVICE_TYPE_OPTIONS"
+        :key="item.value"
+        cols="4"
+        sm="3"
+        md="2"
+      >
         <SelectionCard
-          v-for="item in SERVICE_TYPE_OPTIONS"
-          :key="item.value"
-          v-model="selectedType"
+          v-model="model!"
           :value="item.value"
           :label="item.label"
           :icon="item.icon"
         />
-      </v-row>
-    </div>
+      </v-col>
+    </v-row>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from "vue";
 import { SERVICE_TYPE_OPTIONS } from "~/constants/serviceType";
 import SelectionCard from "../common/SelectionCard.vue";
 
-const props = defineProps<{
-  modelValue: string;
-}>();
-
-const emit = defineEmits(["update:modelValue"]);
-const selectedType = ref(props.modelValue);
-
-watch(selectedType, (newValue) => {
-  emit("update:modelValue", newValue);
-});
+const model = defineModel<string>();
 </script>

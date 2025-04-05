@@ -1,7 +1,7 @@
 <template>
-  <v-container fluid :max-width="containerSize">
+  <v-container fluid max-width="1000px">
     <v-card class="pa-4">
-      <h1 class="text-h4 mb-6 text-center">메뉴 추천</h1>
+      <h1 class="text-h4 mb-6 text-center font-weight-bold">메뉴 추천</h1>
 
       <FoodTypeSection v-model="formData.foodType" />
       <ServiceTypeSection v-model="formData.serviceType" />

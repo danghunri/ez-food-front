@@ -1,34 +1,28 @@
 <template>
-  <div class="mb-4">
-    <div class="text-subtitle-1 mb-2">식사 목적</div>
-    <div class="align-center d-flex justify-center px-5">
-      <v-row justify="center">
+  <div class="mb-4 px-md-16 px-sm-8 px-4">
+    <div class="text-h5 mb-4">식사 목적</div>
+    <v-row>
+      <v-col
+        v-for="item in PURPOSE_OPTIONS"
+        :key="item.value"
+        cols="4"
+        sm="3"
+        md="2"
+      >
         <SelectionCard
-          v-for="item in PURPOSE_OPTIONS"
-          :key="item.value"
-          v-model="selectedPurpose"
+          v-model="model!"
           :value="item.value"
           :label="item.label"
           :icon="item.icon"
         />
-      </v-row>
-    </div>
+      </v-col>
+    </v-row>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from "vue";
 import { PURPOSE_OPTIONS } from "~/constants/purposeType";
 import SelectionCard from "../common/SelectionCard.vue";
 
-const props = defineProps<{
-  modelValue: string;
-}>();
-
-const emit = defineEmits(["update:modelValue"]);
-const selectedPurpose = ref(props.modelValue);
-
-watch(selectedPurpose, (newValue) => {
-  emit("update:modelValue", newValue);
-});
+const model = defineModel<string>();
 </script>

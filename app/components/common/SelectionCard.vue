@@ -1,8 +1,8 @@
 <template>
   <v-card
+    ref="card"
     :class="[
       'selection-card',
-      'ma-2',
       'd-flex',
       'flex-column',
       'align-center',
@@ -10,8 +10,8 @@
       { 'selection-card--selected': modelValue === value },
     ]"
     elevation="2"
-    :width="cardSize"
-    :height="cardSize"
+    width="100%"
+    :height="cardHeight"
     @click="$emit('update:modelValue', value)"
   >
     <v-card-item class="text-center">
@@ -22,37 +22,56 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, onMounted } from "vue";
 import { useDisplay } from "vuetify";
+import type { VCard } from "vuetify/components";
 
-defineProps<{
+const props = defineProps<{
   modelValue: string;
   value: string;
   label: string;
   icon: string;
+  adaptiveIcon?: boolean; // 새로운 prop 추가
 }>();
 
 defineEmits<{
   "update:modelValue": [value: string];
 }>();
 
-const cardSize = ref(100); // 기본값으로 시작
-const iconSize = ref(32); // 기본값으로 시작
+const card = ref<VCard | null>(null);
+const cardHeight = ref("auto");
+const iconSize = ref(32);
 
 onMounted(() => {
   const { mdAndUp, lgAndUp } = useDisplay();
 
-  // watchEffect를 사용하여 반응형 값 변경 감지
-  watchEffect(() => {
-    // 카드 크기 설정
-    if (lgAndUp.value) cardSize.value = 140;
-    else if (mdAndUp.value) cardSize.value = 120;
-    else cardSize.value = 100;
+  // 카드 너비에 맞춰 높이와 아이콘 크기 설정하는 함수
+  const updateCardDimensions = () => {
+    if (card.value) {
+      const width = card.value.$el.offsetWidth;
+      cardHeight.value = `${width}px`;
 
-    // 아이콘 크기 설정
-    if (lgAndUp.value) iconSize.value = 48;
-    else if (mdAndUp.value) iconSize.value = 40;
-    else iconSize.value = 32;
+      // adaptiveIcon이 true일 때 아이콘 크기를 카드 너비에 비례하게 설정
+      if (props.adaptiveIcon) {
+        // 카드 너비의 약 30%를 아이콘 크기로 설정 (적절한 비율로 조정 가능)
+        iconSize.value = Math.floor(width * 0.3);
+      } else {
+        // 기존 로직 유지
+        if (lgAndUp.value) iconSize.value = 48;
+        else if (mdAndUp.value) iconSize.value = 40;
+        else iconSize.value = 32;
+      }
+    }
+  };
+
+  // 초기 설정 및 리사이즈 이벤트에 대응
+  updateCardDimensions();
+  window.addEventListener("resize", updateCardDimensions);
+
+  // watchEffect 대신 updateCardDimensions 사용
+
+  // 컴포넌트 언마운트 시 이벤트 리스너 제거
+  onUnmounted(() => {
+    window.removeEventListener("resize", updateCardDimensions);
   });
 });
 </script>
