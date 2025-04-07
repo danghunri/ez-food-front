@@ -18,7 +18,7 @@
 </template>
 
 <script setup lang="ts">
-import { useGeolocation } from "~~/composables/useGeolocation";
+import { useGeolocation } from "~/composables/useGeolocation";
 
 const { loading, location, error, getCurrentLocation } = useGeolocation();
 

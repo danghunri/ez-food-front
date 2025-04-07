@@ -5,9 +5,7 @@ export default defineNuxtConfig({
     // 서버에서만 사용 가능한 키
     kakaoApiKey: "카카오 api 키",
     // 클라이언트에서도 사용 가능한 키
-    public: {
-      // kakaoApiKey 제거 (더 이상 public에 노출하지 않음)
-    },
+    openWeatherApiKey: "오픈웨더 api 키",
   },
   _modules: ["@nuxt/eslint", "@nuxthub/core"],
   compatibilityDate: "2024-11-01",

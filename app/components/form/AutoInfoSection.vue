@@ -9,10 +9,18 @@
         <LocationInfo />
       </v-col>
       <v-col cols="12" sm="6">
-        <WeatherInfo />
+        <WeatherInfo
+          :weather-data="weatherData"
+          :loading="loading"
+          :error="error"
+        />
       </v-col>
       <v-col cols="12" sm="6">
-        <TemperatureInfo />
+        <TemperatureInfo
+          :weather-data="weatherData"
+          :loading="loading"
+          :error="error"
+        />
       </v-col>
     </v-row>
   </div>
@@ -23,4 +31,7 @@ import DateInfo from "./info/DateInfo.vue";
 import LocationInfo from "./info/LocationInfo.vue";
 import TemperatureInfo from "./info/TemperatureInfo.vue";
 import WeatherInfo from "./info/WeatherInfo.vue";
+
+// 공통 composable 사용 (모든 자식 컴포넌트가 공유)
+const { weatherData, loading, error } = await useWeather();
 </script>

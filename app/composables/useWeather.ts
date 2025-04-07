@@ -1,0 +1,78 @@
+import type { WeatherResponse } from "~~/types/weather";
+
+export const useWeather = () => {
+  const weatherData = ref<WeatherResponse | null>(null);
+  const loading = ref(true);
+  const error = ref<string | null>(null);
+  const coords = ref({ lat: 37.5665, lon: 126.978 }); // 서울 기본값
+  const locationLoaded = ref(false);
+
+  // 위치 정보 가져오기
+  const getLocation = async (): Promise<void> => {
+    if (!import.meta.client || locationLoaded.value) return;
+
+    try {
+      if (navigator.geolocation) {
+        const position = await new Promise<GeolocationPosition>(
+          (resolve, reject) => {
+            navigator.geolocation.getCurrentPosition(resolve, reject, {
+              enableHighAccuracy: true,
+              timeout: 5000,
+              maximumAge: 0,
+            });
+          }
+        );
+
+        coords.value = {
+          lat: position.coords.latitude,
+          lon: position.coords.longitude,
+        };
+      }
+    } catch (e) {
+      console.warn(
+        "위치 정보를 가져올 수 없습니다. 기본 위치(서울)를 사용합니다.",
+        e
+      );
+    } finally {
+      locationLoaded.value = true;
+      // 위치 정보 로드 후 날씨 데이터 가져오기
+    }
+  };
+
+  // 날씨 데이터 가져오기
+  const fetchWeatherData = async () => {
+    loading.value = true;
+    error.value = null;
+
+    try {
+      // 캐시 없이 매번 새로운 데이터 요청
+      const data = await $fetch<WeatherResponse>("/api/weather", {
+        params: {
+          lat: coords.value.lat,
+          lon: coords.value.lon,
+        },
+      });
+
+      // 결과 저장
+      weatherData.value = data;
+    } catch (e) {
+      console.error("날씨 데이터 로딩 오류:", e);
+      error.value = "날씨 정보를 가져오는데 실패했습니다";
+    } finally {
+      loading.value = false;
+    }
+  };
+
+  // 컴포넌트 마운트 시 위치 정보 로딩
+  onMounted(async () => {
+    await getLocation();
+    await fetchWeatherData();
+  });
+
+  return {
+    weatherData,
+    loading,
+    error,
+    coords,
+  };
+};
