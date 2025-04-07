@@ -2,27 +2,21 @@ export const useGeolocation = () => {
   const loading = ref(true);
   const location = ref("");
   const error = ref<string | null>(null);
-  const config = useRuntimeConfig();
 
   const getAddressFromCoords = async (longitude: number, latitude: number) => {
     try {
-      const response = await fetch(
-        `https://dapi.kakao.com/v2/local/geo/coord2address.json?x=${longitude}&y=${latitude}`,
+      const response = await $fetch<{ address: string }>(
+        "/api/geo/coord-to-address",
         {
-          headers: {
-            Authorization: `KakaoAK ${config.public.kakaoApiKey}`,
+          params: {
+            x: longitude,
+            y: latitude,
           },
         }
       );
 
-      const data = await response.json();
-      if (data.documents[0]) {
-        const addr = data.documents[0].address;
-        return `${addr.region_1depth_name} ${addr.region_2depth_name} ${addr.region_3depth_name}`;
-      }
-      return "주소를 찾을 수 없습니다";
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    } catch (err) {
+      return response.address;
+    } catch {
       throw new Error("주소 변환 실패");
     }
   };

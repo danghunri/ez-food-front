@@ -1,5 +1,5 @@
 <template>
-  <v-app-bar elevation="1">
+  <v-app-bar elevation="1" height="64">
     <v-toolbar-title class="text-primary font-weight-bold">
       <NuxtLink
         to="/"

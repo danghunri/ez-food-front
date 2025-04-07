@@ -2,8 +2,11 @@
 import vuetify, { transformAssetUrls } from "vite-plugin-vuetify";
 export default defineNuxtConfig({
   runtimeConfig: {
+    // 서버에서만 사용 가능한 키
+    kakaoApiKey: "카카오 api 키",
+    // 클라이언트에서도 사용 가능한 키
     public: {
-      kakaoApiKey: import.meta.env.NUXT_KAKAO_API_KEY,
+      // kakaoApiKey 제거 (더 이상 public에 노출하지 않음)
     },
   },
   _modules: ["@nuxt/eslint", "@nuxthub/core"],

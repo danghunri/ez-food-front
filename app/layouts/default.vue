@@ -5,7 +5,7 @@ import TheHeader from "~/components/layout/TheHeader.vue";
 <template>
   <v-app>
     <TheHeader />
-    <v-main>
+    <v-main class="pt-16">
       <slot />
     </v-main>
   </v-app>

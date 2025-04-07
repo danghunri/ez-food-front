@@ -11,12 +11,11 @@
     ]"
     elevation="2"
     width="100%"
-    :height="cardHeight"
     @click="$emit('update:modelValue', value)"
   >
     <v-card-item class="text-center">
       <v-icon :size="iconSize" class="mb-2">{{ icon }}</v-icon>
-      <div class="text-caption">{{ label }}</div>
+      <div class="text-subtitle-1">{{ label }}</div>
     </v-card-item>
   </v-card>
 </template>
@@ -30,7 +29,7 @@ const props = defineProps<{
   value: string;
   label: string;
   icon: string;
-  adaptiveIcon?: boolean; // 새로운 prop 추가
+  adaptiveIcon?: boolean;
 }>();
 
 defineEmits<{
@@ -38,40 +37,32 @@ defineEmits<{
 }>();
 
 const card = ref<VCard | null>(null);
-const cardHeight = ref("auto");
 const iconSize = ref(32);
 
 onMounted(() => {
   const { mdAndUp, lgAndUp } = useDisplay();
 
-  // 카드 너비에 맞춰 높이와 아이콘 크기 설정하는 함수
-  const updateCardDimensions = () => {
-    if (card.value) {
+  // 아이콘 크기만 설정하는 함수
+  const updateIconSize = () => {
+    if (card.value && props.adaptiveIcon) {
       const width = card.value.$el.offsetWidth;
-      cardHeight.value = `${width}px`;
-
-      // adaptiveIcon이 true일 때 아이콘 크기를 카드 너비에 비례하게 설정
-      if (props.adaptiveIcon) {
-        // 카드 너비의 약 30%를 아이콘 크기로 설정 (적절한 비율로 조정 가능)
-        iconSize.value = Math.floor(width * 0.3);
-      } else {
-        // 기존 로직 유지
-        if (lgAndUp.value) iconSize.value = 48;
-        else if (mdAndUp.value) iconSize.value = 40;
-        else iconSize.value = 32;
-      }
+      // 카드 너비의 약 30%를 아이콘 크기로 설정
+      iconSize.value = Math.floor(width * 0.3);
+    } else {
+      // 기존 로직 유지
+      if (lgAndUp.value) iconSize.value = 48;
+      else if (mdAndUp.value) iconSize.value = 40;
+      else iconSize.value = 32;
     }
   };
 
   // 초기 설정 및 리사이즈 이벤트에 대응
-  updateCardDimensions();
-  window.addEventListener("resize", updateCardDimensions);
-
-  // watchEffect 대신 updateCardDimensions 사용
+  updateIconSize();
+  window.addEventListener("resize", updateIconSize);
 
   // 컴포넌트 언마운트 시 이벤트 리스너 제거
   onUnmounted(() => {
-    window.removeEventListener("resize", updateCardDimensions);
+    window.removeEventListener("resize", updateIconSize);
   });
 });
 </script>
@@ -81,6 +72,7 @@ onMounted(() => {
   cursor: pointer;
   transition: all 0.3s;
   user-select: none;
+  aspect-ratio: 1 / 1; /* 정사각형 비율 설정 (가로:세로 = 1:1) */
 }
 
 .selection-card:hover {
