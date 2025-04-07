@@ -36,6 +36,14 @@ const weather = computed(() => {
   return props.weatherData.weather[0].description;
 });
 
+const emit = defineEmits(["update:weather"]);
+
+watch(weather, (newWeather) => {
+  if (newWeather) {
+    emit("update:weather", newWeather);
+  }
+});
+
 // 날씨 아이콘 (반응형)
 const weatherIcon = computed(() => {
   if (!props.weatherData?.weather?.[0]) return null;

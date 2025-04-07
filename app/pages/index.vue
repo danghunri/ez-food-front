@@ -7,7 +7,12 @@
       <ServiceTypeSection v-model="formData.serviceType" />
       <MealTimeSection v-model="formData.mealTime" />
       <PurposeSection v-model="formData.purpose" />
-      <AutoInfoSection />
+      <AutoInfoSection
+        v-model:date="formData.date"
+        v-model:location="formData.location"
+        v-model:weather="formData.weather"
+        v-model:temperature="formData.temperature"
+      />
 
       <div class="d-flex justify-center mt-6">
         <v-btn
@@ -36,6 +41,10 @@ const formData = ref({
   serviceType: "all",
   mealTime: "",
   purpose: "",
+  date: null,
+  location: null,
+  weather: null,
+  temperature: null,
 });
 
 const isLoading = ref(false);

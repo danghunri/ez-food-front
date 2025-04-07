@@ -39,6 +39,14 @@ const temperature = computed(() => {
   return `${Math.round(props.weatherData.main.temp * 10) / 10}°C`;
 });
 
+const emit = defineEmits(["update:temperature"]);
+
+watch(temperature, (newTemperature) => {
+  if (newTemperature) {
+    emit("update:temperature", newTemperature);
+  }
+});
+
 // 체감 온도 (반응형)
 const feelsLike = computed(() => {
   if (!props.weatherData?.main?.feels_like) return "";

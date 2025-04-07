@@ -21,8 +21,11 @@
 const loading = ref(true);
 const date = ref("");
 
+const emit = defineEmits(["update:date"]);
+
 onMounted(async () => {
   date.value = new Date().toLocaleString("ko-KR");
   loading.value = false;
+  emit("update:date", date.value);
 });
 </script>
