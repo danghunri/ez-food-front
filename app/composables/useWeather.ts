@@ -1,5 +1,6 @@
 import type { WeatherResponse } from "~~/types/weather";
 import { getWeatherByCoords } from "~/services/api";
+import { getCurrentPosition } from "~/utils/geolocation";
 
 export const useWeather = () => {
   const weatherData = ref<WeatherResponse | null>(null);
@@ -13,22 +14,8 @@ export const useWeather = () => {
     if (!import.meta.client || locationLoaded.value) return;
 
     try {
-      if (navigator.geolocation) {
-        const position = await new Promise<GeolocationPosition>(
-          (resolve, reject) => {
-            navigator.geolocation.getCurrentPosition(resolve, reject, {
-              enableHighAccuracy: true,
-              timeout: 5000,
-              maximumAge: 0,
-            });
-          }
-        );
-
-        coords.value = {
-          lat: position.coords.latitude,
-          lon: position.coords.longitude,
-        };
-      }
+      const position = await getCurrentPosition();
+      coords.value = position;
     } catch (e) {
       console.warn(
         "위치 정보를 가져올 수 없습니다. 기본 위치(서울)를 사용합니다.",

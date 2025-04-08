@@ -20,13 +20,9 @@
 <script setup lang="ts">
 import { useGeolocation } from "~/composables/useGeolocation";
 
-const { loading, location, error, getCurrentLocation } = useGeolocation();
+const { loading, location, error } = useGeolocation();
 
 const emit = defineEmits(["update:location"]);
-
-onMounted(() => {
-  getCurrentLocation();
-});
 
 watch(location, (newLocation) => {
   if (newLocation) {
