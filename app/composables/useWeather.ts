@@ -2,7 +2,7 @@ import type { WeatherResponse } from "~~/types/weather";
 import { getWeatherByCoords } from "~/services/api";
 import { getCurrentPosition } from "~/utils/geolocation";
 
-export const useWeather = () => {
+export const useWeather = async () => {
   const weatherData = ref<WeatherResponse | null>(null);
   const loading = ref(true);
   const error = ref<string | null>(null);

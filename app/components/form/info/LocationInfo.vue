@@ -20,7 +20,7 @@
 <script setup lang="ts">
 import { useGeolocation } from "~/composables/useGeolocation";
 
-const { loading, location, error } = useGeolocation();
+const { loading, location, error } = await useGeolocation();
 
 const emit = defineEmits(["update:location"]);
 

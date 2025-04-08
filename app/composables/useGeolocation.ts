@@ -1,7 +1,7 @@
 import { getAddressFromCoords } from "~/services/api";
 import { getCurrentPosition } from "~/utils/geolocation";
 
-export const useGeolocation = () => {
+export const useGeolocation = async () => {
   const loading = ref(true);
   const location = ref("");
   const error = ref<string | null>(null);
@@ -18,8 +18,8 @@ export const useGeolocation = () => {
     }
   };
 
-  onMounted(() => {
-    getCurrentLocation();
+  onMounted(async () => {
+    await getCurrentLocation();
   });
 
   return {

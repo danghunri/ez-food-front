@@ -33,13 +33,13 @@ const props = defineProps<{
   error: string | null;
 }>();
 
+const emit = defineEmits(["update:temperature"]);
+
 // 현재 온도 (반응형)
 const temperature = computed(() => {
   if (!props.weatherData?.main?.temp) return "정보 없음";
   return `${Math.round(props.weatherData.main.temp * 10) / 10}°C`;
 });
-
-const emit = defineEmits(["update:temperature"]);
 
 watch(temperature, (newTemperature) => {
   if (newTemperature) {
