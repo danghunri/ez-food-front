@@ -1,25 +1,9 @@
+import { getAddressFromCoords } from "~/services/api";
+
 export const useGeolocation = () => {
   const loading = ref(true);
   const location = ref("");
   const error = ref<string | null>(null);
-
-  const getAddressFromCoords = async (longitude: number, latitude: number) => {
-    try {
-      const response = await $fetch<{ address: string }>(
-        "/api/geo/coord-to-address",
-        {
-          params: {
-            x: longitude,
-            y: latitude,
-          },
-        }
-      );
-
-      return response.address;
-    } catch {
-      throw new Error("주소 변환 실패");
-    }
-  };
 
   const getCurrentLocation = () => {
     if (!navigator.geolocation) {
@@ -31,10 +15,11 @@ export const useGeolocation = () => {
     navigator.geolocation.getCurrentPosition(
       async (position) => {
         try {
-          location.value = await getAddressFromCoords(
+          const response = await getAddressFromCoords(
             position.coords.longitude,
             position.coords.latitude
           );
+          location.value = response.address;
         } catch (err) {
           error.value = (err as Error).message;
         } finally {

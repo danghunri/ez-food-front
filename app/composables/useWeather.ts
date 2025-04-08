@@ -1,4 +1,5 @@
 import type { WeatherResponse } from "~~/types/weather";
+import { getWeatherByCoords } from "~/services/api";
 
 export const useWeather = () => {
   const weatherData = ref<WeatherResponse | null>(null);
@@ -45,16 +46,11 @@ export const useWeather = () => {
     error.value = null;
 
     try {
-      // 캐시 없이 매번 새로운 데이터 요청
-      const data = await $fetch<WeatherResponse>("/api/weather", {
-        params: {
-          lat: coords.value.lat,
-          lon: coords.value.lon,
-        },
-      });
-
-      // 결과 저장
-      weatherData.value = data;
+      // API 서비스를 사용하여 날씨 데이터 요청
+      weatherData.value = await getWeatherByCoords(
+        coords.value.lat,
+        coords.value.lon
+      );
     } catch (e) {
       console.error("날씨 데이터 로딩 오류:", e);
       error.value = "날씨 정보를 가져오는데 실패했습니다";
