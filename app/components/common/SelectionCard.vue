@@ -7,11 +7,11 @@
       'flex-column',
       'align-center',
       'justify-center',
-      { 'selection-card--selected': modelValue === value },
+      { 'selection-card--selected': model === value },
     ]"
     elevation="2"
     width="100%"
-    @click="$emit('update:modelValue', value)"
+    @click="model = value"
   >
     <v-card-item class="text-center">
       <v-icon :size="iconSize" class="mb-2">{{ icon }}</v-icon>
@@ -24,16 +24,13 @@
 import { useDisplay } from "vuetify";
 import type { VCard } from "vuetify/components";
 
+const model = defineModel<string>();
+
 const props = defineProps<{
-  modelValue: string;
   value: string;
   label: string;
   icon: string;
   adaptiveIcon?: boolean;
-}>();
-
-defineEmits<{
-  "update:modelValue": [value: string];
 }>();
 
 const card = ref<VCard | null>(null);
