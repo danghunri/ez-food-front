@@ -35,7 +35,7 @@ import TemperatureInfo from "./info/TemperatureInfo.vue";
 import WeatherInfo from "./info/WeatherInfo.vue";
 
 // 공통 composable 사용 (모든 자식 컴포넌트가 공유)
-const { weatherData, loading, error } = await useWeather();
+const { weatherData, loading, error } = useWeather();
 
 // 이벤트를 상위 컴포넌트로 전달하기 위한 emits 정의
 const emit = defineEmits([

@@ -2,7 +2,7 @@ import type { WeatherResponse } from "~~/types/weather";
 import { getWeatherByCoords } from "~/services/api";
 import { getCurrentPosition } from "~/utils/geolocation";
 
-export const useWeather = async () => {
+export const useWeather = () => {
   const weatherData = ref<WeatherResponse | null>(null);
   const loading = ref(true);
   const error = ref<string | null>(null);
@@ -17,10 +17,8 @@ export const useWeather = async () => {
       const position = await getCurrentPosition();
       coords.value = position;
     } catch (e) {
-      console.warn(
-        "위치 정보를 가져올 수 없습니다. 기본 위치(서울)를 사용합니다.",
-        e
-      );
+      console.error("날씨 데이터 로딩 오류:", e);
+      error.value = "날씨 정보를 가져오는데 실패했습니다";
     } finally {
       locationLoaded.value = true;
       // 위치 정보 로드 후 날씨 데이터 가져오기
