@@ -22,6 +22,7 @@ interface RecommendationInput {
   location?: string;
   preferences?: string[];
   allergies?: string[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [key: string]: any;
 }
 
@@ -53,14 +54,14 @@ export function useMenuRecommendation() {
   // 텍스트 프롬프트로 메뉴 추천
   const getRecommendationFromText = async (prompt: string) => {
     try {
-      // 모델 초기화
-      await initModel();
+      // 모델이 초기화되지 않았을 경우에만 초기화
+      const pipeline = model.value || (await initModel());
 
       // 메뉴 추천을 위한 프롬프트 구성
       const fullPrompt = `다음 조건에 맞는 식당과 메뉴를 추천해주세요. JSON 형식으로 응답해주세요. 조건: ${prompt}`;
 
       // 추론 실행
-      const rawResult = await runInference(model.value!, fullPrompt);
+      const rawResult = await runInference(pipeline!, fullPrompt);
 
       // 결과 파싱 및 가공
       const result = parseRecommendationResult(rawResult);
@@ -76,14 +77,14 @@ export function useMenuRecommendation() {
   // 구조화된 데이터로 메뉴 추천
   const getRecommendationFromData = async (input: RecommendationInput) => {
     try {
-      // 모델 초기화
-      await initModel();
+      // 모델이 초기화되지 않았을 경우에만 초기화
+      const pipeline = model.value || (await initModel());
 
       // 입력 데이터를 프롬프트로 변환
       const prompt = buildPromptFromData(input);
 
       // 추론 실행
-      const rawResult = await runInference(model.value!, prompt);
+      const rawResult = await runInference(pipeline!, prompt);
 
       // 결과 파싱 및 가공
       const result = parseRecommendationResult(rawResult);
@@ -144,6 +145,7 @@ export function useMenuRecommendation() {
   };
 
   // 모델 결과를 파싱하는 함수
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const parseRecommendationResult = (rawResult: any): RecommendationResult => {
     try {
       // 모델에 따라 결과 형식이 다를 수 있으므로 적절히 파싱
