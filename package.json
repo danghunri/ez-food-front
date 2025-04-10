@@ -10,6 +10,7 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "@huggingface/transformers": "^3.4.2",
     "@mdi/font": "^7.4.47",
     "@nuxt/eslint": "^1.2.0",
     "@nuxthub/core": "^0.8.23",

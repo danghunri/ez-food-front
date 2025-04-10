@@ -14,7 +14,7 @@ export default defineNuxtConfig({
     compatibilityVersion: 4,
   },
   build: {
-    transpile: ["vuetify"],
+    transpile: ["vuetify", "@xenova/transformers"],
   },
   modules: [
     (_options, nuxt) => {
@@ -27,6 +27,16 @@ export default defineNuxtConfig({
     //...
   ],
   vite: {
+    optimizeDeps: {
+      exclude: ["@xenova/transformers"],
+    },
+    build: {
+      target: "esnext", // 최신 자바스크립트 기능 사용
+    },
+    // 웹 워커 설정
+    worker: {
+      format: "es",
+    },
     vue: {
       template: {
         transformAssetUrls,
