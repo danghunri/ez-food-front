@@ -1,30 +1,9 @@
 import type { Pipeline } from "@huggingface/transformers";
 import { useTransformers } from "./useTransformers";
-
-// 추천 결과 타입 정의
-interface RecommendationResult {
-  reason: string;
-  recommendations: {
-    name: string;
-    description?: string;
-    score?: number;
-  }[];
-}
-
-// 입력 데이터 타입 정의 (필요에 따라 수정 가능)
-interface RecommendationInput {
-  foodType?: string;
-  serviceType?: string;
-  mealTime?: string;
-  purpose?: string;
-  weather?: string;
-  temperature?: number;
-  location?: string;
-  preferences?: string[];
-  allergies?: string[];
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  [key: string]: any;
-}
+import type {
+  RecommendationInput,
+  RecommendationResult,
+} from "~/types/recommendation";
 
 export function useMenuRecommendation() {
   const { isLoading, isInferencing, error, createPipeline, runInference } =
@@ -116,6 +95,9 @@ export function useMenuRecommendation() {
       prompt += `목적: ${input.purpose}\n`;
     }
     if (input.weather) {
+      prompt += `날짜: ${input.date}\n`;
+    }
+    if (input.weather) {
       prompt += `날씨: ${input.weather}\n`;
     }
     if (input.temperature !== undefined) {
@@ -123,12 +105,6 @@ export function useMenuRecommendation() {
     }
     if (input.location) {
       prompt += `위치: ${input.location}\n`;
-    }
-    if (input.preferences && input.preferences.length) {
-      prompt += `선호사항: ${input.preferences.join(", ")}\n`;
-    }
-    if (input.allergies && input.allergies.length) {
-      prompt += `알레르기: ${input.allergies.join(", ")}\n`;
     }
 
     prompt += "\n응답 형식은 다음과 같이 JSON 형식이어야 합니다:\n";

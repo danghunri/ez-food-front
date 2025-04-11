@@ -18,7 +18,7 @@
         <v-btn
           color="primary"
           size="large"
-          :loading="isLoading"
+          :loading="isLoading || isInferencing"
           @click="handleSubmit"
         >
           추천 받기
@@ -37,41 +37,26 @@ import PurposeSection from "~/components/form/PurposeSection.vue";
 import ServiceTypeSection from "~/components/form/ServiceTypeSection.vue";
 
 const formData = ref({
-  foodType: "all",
-  serviceType: "all",
-  mealTime: "",
-  purpose: "",
+  foodType: "상관없음",
+  serviceType: "상관없음",
+  mealTime: "상관없음",
+  purpose: "상관없음",
   date: null,
   location: null,
   weather: null,
   temperature: null,
 });
 
-const isLoading = ref(false);
-
 const handleSubmit = async () => {
-  isLoading.value = true;
-  try {
-    // API 호출 로직 구현
-    console.log("폼 데이터:", formData.value);
-  } catch (error) {
-    console.error("에러:", error);
-  } finally {
-    isLoading.value = false;
-  }
+  const result = await getRecommendationFromData(formData.value);
+  console.log(result);
 };
 
-const containerSize = ref<number>(800);
-onMounted(() => {
-  const { mdAndUp, lgAndUp } = useDisplay();
+const { initModel, isLoading, isInferencing, getRecommendationFromData } =
+  useMenuRecommendation();
 
-  // watchEffect를 사용하여 반응형 값 변경 감지
-  watchEffect(() => {
-    // 컨테이너 크기 설정
-    if (lgAndUp.value) containerSize.value = 1000;
-    else if (mdAndUp.value) containerSize.value = 800;
-    else containerSize.value = 600;
-  });
+onMounted(async () => {
+  await initModel();
 });
 </script>
 <style scoped></style>

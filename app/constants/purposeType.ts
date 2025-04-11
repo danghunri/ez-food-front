@@ -1,4 +1,5 @@
 export const PURPOSE_OPTIONS = [
+  { value: "상관없음", label: "상관없음", icon: "mdi-dots-horizontal" },
   { value: "다이어트", label: "다이어트", icon: "mdi-scale-bathroom" },
   { value: "데이트", label: "데이트", icon: "mdi-heart" },
   { value: "혼밥", label: "혼밥", icon: "mdi-account" },
