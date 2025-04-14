@@ -16,11 +16,9 @@ export function useMenuRecommendation() {
   const initModel = async () => {
     if (!model.value) {
       try {
-        // text-generation 모델 사용 (필요에 따라 다른 모델 사용 가능)
-        // 'Xenova/distilgpt2'는 예시입니다. 메뉴 추천에 특화된 모델로 변경 가능
         model.value = await createPipeline(
           "text-generation",
-          "Xenova/distilgpt2"
+          "Xenova/llama2.c-stories15M"
         );
       } catch (err) {
         console.error("메뉴 추천 모델 초기화 실패:", err);

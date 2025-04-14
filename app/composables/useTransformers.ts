@@ -28,7 +28,9 @@ export function useTransformers() {
       const { pipeline } = await import("@huggingface/transformers");
 
       // 모델 로드
-      const pipe = model ? await pipeline(task, model) : await pipeline(task);
+      const pipe = model
+        ? await pipeline(task, model, { device: "webgpu", dtype: "q8" })
+        : await pipeline(task, undefined, { device: "webgpu", dtype: "q8" });
       // 캐시에 저장
       modelCache.set(cacheKey, pipe);
       isLoading.value = false;
