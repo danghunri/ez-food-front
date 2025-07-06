@@ -14,8 +14,21 @@
       </NuxtLink>
       음식 메뉴 추천
     </v-toolbar-title>
+    
+    <v-spacer />
+    
+    <!-- Theme Toggle Button -->
+    <v-btn
+      variant="text"
+      :icon="isDark ? 'mdi-white-balance-sunny' : 'mdi-weather-night'"
+      @click="toggleTheme"
+      :title="isDark ? '라이트 모드로 전환' : '다크 모드로 전환'"
+    />
   </v-app-bar>
 </template>
 <script lang="ts" setup>
 const isHover = ref(false);
+
+// Theme management
+const { isDark, toggleTheme } = useTheme();
 </script>
