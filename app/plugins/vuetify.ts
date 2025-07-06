@@ -11,12 +11,21 @@ const myCustomLightTheme = {
   },
 };
 
+const myCustomDarkTheme = {
+  dark: true,
+  colors: {
+    primary: "#7C4DFF",
+    secondary: "#FFD54F",
+  },
+};
+
 export default defineNuxtPlugin((app) => {
   const vuetify = createVuetify({
     theme: {
       defaultTheme: "myCustomLightTheme",
       themes: {
         myCustomLightTheme,
+        myCustomDarkTheme,
       },
       variations: {
         colors: ["primary", "secondary"],
